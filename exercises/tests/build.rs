@@ -12,7 +12,7 @@ fn main() {
         .as_secs(); // What's the use of this timestamp here?
     let your_command = format!(
         "Your command here with {}, please checkout exercises/tests/build.rs",
-        timestamp
+        timestamp + 1
     );
     println!("cargo:{}", your_command);
 
