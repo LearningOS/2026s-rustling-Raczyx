@@ -35,7 +35,7 @@ impl<T> Default for LinkedList<T> {
     }
 }
 
-impl<T> LinkedList<T> {
+impl<T:PartialOrd> LinkedList<T> {
     pub fn new() -> Self {
         Self {
             length: 0,
@@ -72,11 +72,22 @@ impl<T> LinkedList<T> {
 	pub fn merge(list_a:LinkedList<T>,list_b:LinkedList<T>) -> Self
 	{
 		//TODO
-		Self {
-            length: 0,
-            start: None,
-            end: None,
+        let mut list = LinkedList::<T>::new();
+        let mut i = 0;
+        let mut j = 0;
+        while i < list_a.length && j < list_b.length {
+            let a = list_a.get(i as i32).unwrap();
+            let b = list_b.get(j as i32).unwrap();
+            if a<b {
+                list.add(a.clone());
+                i = i+1;
+            }else{
+                list.add(b.clone());
+                j += 1;
+            }
         }
+
+        list
 	}
 }
 
