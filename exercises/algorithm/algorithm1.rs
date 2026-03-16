@@ -2,7 +2,7 @@
 	single linked list merge
 	This problem requires you to merge two ordered singly linked lists into one ordered singly linked list
 */
-// I AM NOT DONE
+
 
 use std::fmt::{self, Display, Formatter};
 use std::ptr::NonNull;
@@ -35,7 +35,7 @@ impl<T> Default for LinkedList<T> {
     }
 }
 
-impl<T:PartialOrd> LinkedList<T> {
+impl<T> LinkedList<T> {
     pub fn new() -> Self {
         Self {
             length: 0,
@@ -69,6 +69,7 @@ impl<T:PartialOrd> LinkedList<T> {
             },
         }
     }
+    /* 
 	pub fn merge(list_a:LinkedList<T>,list_b:LinkedList<T>) -> Self
 	{
 		//TODO
@@ -85,6 +86,40 @@ impl<T:PartialOrd> LinkedList<T> {
                 list.add(b.clone());
                 j += 1;
             }
+        }
+
+        list
+	}
+    */
+}
+
+impl<T:PartialOrd + Clone> LinkedList<T> {
+	pub fn merge(mut list_a:LinkedList<T>,mut list_b:LinkedList<T>) -> Self
+	{
+		//TODO
+        let mut list = LinkedList::<T>::new();
+        let mut i = 0;
+        let mut j = 0;
+        while i < list_a.length && j < list_b.length {
+            let a = list_a.get(i as i32).unwrap();
+            let b = list_b.get(j as i32).unwrap();
+            if a<b {
+                list.add(a.clone());
+                i = i+1;
+            }else{
+                list.add(b.clone());
+                j += 1;
+            }
+        }
+        while i < list_a.length {
+            let a = list_a.get(i as i32).unwrap();
+            list.add(a.clone());
+            i = i+1;
+        }
+        while j < list_b.length {
+            let b = list_b.get(j as i32).unwrap();
+            list.add(b.clone());
+            j += 1;
         }
 
         list
