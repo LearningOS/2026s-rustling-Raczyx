@@ -3,7 +3,7 @@
 	This question requires you to use a stack to achieve a bracket match
 */
 
-// I AM NOT DONE
+
 #[derive(Debug)]
 struct Stack<T> {
 	size: usize,
@@ -31,8 +31,12 @@ impl<T> Stack<T> {
 		self.size += 1;
 	}
 	fn pop(&mut self) -> Option<T> {
-		// TODO
-		None
+		if self.size > 0 {
+			self.size -= 1;
+			self.data.pop()
+		}else{
+			None
+		}
 	}
 	fn peek(&self) -> Option<&T> {
 		if 0 == self.size {
@@ -99,10 +103,43 @@ impl<'a, T> Iterator for IterMut<'a, T> {
 	}
 }
 
+fn word_weight(word: &str) ->i32 {
+	if word == "(" || word == "[" || word == "{" {
+		return 1;
+	}
+	if word == ")" || word == "]" || word == "}" {
+		return -1;
+	}
+	0
+}
+
+fn word_match(l:&str,r:&str)->bool {
+	(l == "(" && r == ")" ) || (l=="[" && r=="]") || (l=="{"&&r=="}")
+}
+
 fn bracket_match(bracket: &str) -> bool
 {
 	//TODO
-	true
+	let mut stack:Vec<&str> = Vec::new();
+	let mut flag :i32 = 0;
+	for i in bracket.split(""){
+		let num = word_weight(i);
+		flag += num;
+		if flag <0 {
+			return false;
+		}
+		if num > 0 {
+			stack.push(i);
+		}else if num < 0 {
+			let top = stack.last().unwrap();
+			if word_match(top,i){
+				stack.pop();
+			}else{
+				stack.push(i);
+			}
+		}
+	}
+	flag == 0 && stack.len() == 0
 }
 
 #[cfg(test)]
