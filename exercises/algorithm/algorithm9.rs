@@ -38,6 +38,19 @@ where
 
     pub fn add(&mut self, value: T) {
         //TODO
+        self.items[self.count] = value;
+        let mut index = self.count;
+        self.count += 1;
+        
+        while index != 0 {
+            let p_idx = self.parent_idx(index);
+            if !(self.comparator)(&self.items[p_idx],&self.items[index]) {
+                //std::mem::swap(&mut self.items[p_idx],&mut self.items[index]);
+                self.items.swap(p_idx,index);
+                
+            }
+            index = p_idx;
+        }
     }
 
     fn parent_idx(&self, idx: usize) -> usize {
@@ -84,7 +97,23 @@ where
     type Item = T;
 
     fn next(&mut self) -> Option<T> {
-        //TODO
+        if self.count > 0 {
+            let res = self.items.remove(0usize);
+            self.count -= 1;
+            let mut index = self.count;
+            while index != 0 {
+                let p_idx = self.parent_idx(index);
+                if !(self.comparator)(&self.items[p_idx],&self.items[index]) {
+                    //std::mem::swap(&mut self.items[p_idx],&mut self.items[index]);
+                    self.items.swap(p_idx,index);
+                
+                }
+                index = p_idx;
+            }
+
+
+            return Some(res);
+        }
 		None
     }
 }
