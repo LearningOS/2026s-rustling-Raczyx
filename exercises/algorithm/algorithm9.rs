@@ -2,7 +2,7 @@
 	heap
 	This question requires you to implement a binary heap function
 */
-// I AM NOT DONE
+
 
 use std::cmp::Ord;
 use std::default::Default;
@@ -38,16 +38,16 @@ where
 
     pub fn add(&mut self, value: T) {
         //TODO
-        self.items[self.count] = value;
-        let mut index = self.count;
         self.count += 1;
+        self.items.push(value);
+        let mut index = self.count;
         
-        while index != 0 {
+        
+        while index > 1 {
             let p_idx = self.parent_idx(index);
             if !(self.comparator)(&self.items[p_idx],&self.items[index]) {
                 //std::mem::swap(&mut self.items[p_idx],&mut self.items[index]);
                 self.items.swap(p_idx,index);
-                
             }
             index = p_idx;
         }
@@ -70,8 +70,15 @@ where
     }
 
     fn smallest_child_idx(&self, idx: usize) -> usize {
-        //TODO
-		0
+        if idx*2 +1 <= self.count {
+            if (self.comparator)(&self.items[idx*2],&self.items[idx*2+1]) {
+                return idx * 2
+            }else{
+                return idx*2+1;
+            }
+        }else{
+            return idx*2;
+        }
     }
 }
 
@@ -97,24 +104,26 @@ where
     type Item = T;
 
     fn next(&mut self) -> Option<T> {
-        if self.count > 0 {
-            let res = self.items.remove(0usize);
+        let res = if self.is_empty(){
+            None
+        }else{
+            self.items.swap(1usize,self.count);
+            let top = self.items.pop();
             self.count -= 1;
-            let mut index = self.count;
-            while index != 0 {
-                let p_idx = self.parent_idx(index);
-                if !(self.comparator)(&self.items[p_idx],&self.items[index]) {
-                    //std::mem::swap(&mut self.items[p_idx],&mut self.items[index]);
-                    self.items.swap(p_idx,index);
-                
+            let mut index = 1usize;
+            while self.children_present(index) {
+                let idx = self.smallest_child_idx(index);
+                if (self.comparator)(&self.items[index],&self.items[idx]){
+                    break;
+                }else{
+                    self.items.swap(index,idx);
+                    index = idx;
                 }
-                index = p_idx;
             }
+            top
+        };
 
-
-            return Some(res);
-        }
-		None
+        res
     }
 }
 

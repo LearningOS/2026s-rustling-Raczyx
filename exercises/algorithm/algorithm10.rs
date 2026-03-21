@@ -2,7 +2,7 @@
 	graph
 	This problem requires you to implement a basic graph functio
 */
-// I AM NOT DONE
+
 
 use std::collections::{HashMap, HashSet};
 use std::fmt;
@@ -30,6 +30,15 @@ impl Graph for UndirectedGraph {
     }
     fn add_edge(&mut self, edge: (&str, &str, i32)) {
         //TODO
+        let (from_n, to_n,weight) = edge;
+        self.adjacency_table_mutable()
+        .entry(from_n.to_string())
+        .or_default()
+        .push((String::from(to_n),weight));
+        self.adjacency_table_mutable()
+        .entry(to_n.to_string())
+        .or_default()
+        .push((String::from(from_n),weight));
     }
 }
 pub trait Graph {
@@ -42,6 +51,15 @@ pub trait Graph {
     }
     fn add_edge(&mut self, edge: (&str, &str, i32)) {
         //TODO
+        let (from_n, to_n,weight) = edge;
+        self.adjacency_table_mutable()
+        .entry(from_n.to_string())
+        .or_default()
+        .push((String::from(to_n),weight));
+        self.adjacency_table_mutable()
+        .entry(to_n.to_string())
+        .or_default()
+        .push((String::from(from_n),weight));
     }
     fn contains(&self, node: &str) -> bool {
         self.adjacency_table().get(node).is_some()
@@ -69,6 +87,8 @@ mod test_undirected_graph {
         graph.add_edge(("a", "b", 5));
         graph.add_edge(("b", "c", 10));
         graph.add_edge(("c", "a", 7));
+
+
         let expected_edges = [
             (&String::from("a"), &String::from("b"), 5),
             (&String::from("b"), &String::from("a"), 5),
